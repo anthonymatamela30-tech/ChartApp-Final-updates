@@ -8,12 +8,13 @@ package com.mycompany.chatapp;
  *
  * @author Student
  */
-public class Test {
+public class Login {
+
     private String username;
     private String password;
     private String cellPhoneNumber;
 
-    public Test(String username, String password, String cellPhoneNumber) {
+    public Login(String username, String password, String cellPhoneNumber) {
         this.username = username;
         this.password = password;
         this.cellPhoneNumber = cellPhoneNumber;
@@ -77,3 +78,4 @@ public class Test {
         }
     }
 }
+

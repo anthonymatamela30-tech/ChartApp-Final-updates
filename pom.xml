@@ -30,6 +30,13 @@
             <version>1.3.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.telegram4j</groupId>
+            <artifactId>tl-parser</artifactId>
+            <version>0.1.1</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

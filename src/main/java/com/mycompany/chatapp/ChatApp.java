@@ -6,10 +6,6 @@ package com.mycompany.chatapp;
 
 import java.util.Scanner;
 
-/**
- *
- * @author Student
- */
 public class ChatApp {
 
     public static void main(String[] args) {
@@ -30,7 +26,7 @@ public class ChatApp {
         System.out.print("Enter last name: ");
         String lastName = input.nextLine();
 
-        Test user = new Test(username, password, cellPhoneNumber);
+        Login user = new Login(username, password, cellPhoneNumber);
 
         String registrationMessage = user.registerUser();
         System.out.println(registrationMessage);
