@@ -4,6 +4,7 @@
  */
 package com.mycompany.chatapp;
 
+import java.util.Arrays;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -42,94 +43,147 @@ public class MessageTest {
      */
     @Test
     public void testCheckMessageID() {
-        System.out.println("checkMessageID");
-        Message instance = null;
-        boolean expResult = false;
-        boolean result = instance.checkMessageID();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        Message msg = new Message(
+                "+27821234567",
+                "Hello, how are you?"
+        );
+
+        assertTrue(
+                msg.checkMessageID(),
+                "Message ID should be 10 characters or less."
+        );
     }
 
-    /**
-     * Test of checkRecipientCell method, of class Message.
-     */
+    // Test 2: Check that a valid South African
+    // international recipient number is accepted.
     @Test
-    public void testCheckRecipientCell() {
-        System.out.println("checkRecipientCell");
-        Message instance = null;
-        boolean expResult = false;
-        boolean result = instance.checkRecipientCell();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testValidRecipientCell() {
+
+        Message msg = new Message(
+                "+27821234567",
+                "Hello"
+        );
+
+        assertTrue(
+                msg.checkRecipientCell(),
+                "A valid +27 recipient number should be accepted."
+        );
     }
 
-    /**
-     * Test of sentMessage method, of class Message.
-     */
+    // Test 3: Check that an invalid recipient
+    // number is rejected.
     @Test
-    public void testSentMessage() {
-        System.out.println("sentMessage");
-        Message instance = null;
-        String expResult = "";
-        String result = instance.sentMessage();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testInvalidRecipientCell() {
+
+        Message msg = new Message(
+                "0821234567",
+                "Hello"
+        );
+
+        assertFalse(
+                msg.checkRecipientCell(),
+                "A number without the +27 code should be rejected."
+        );
     }
 
-    /**
-     * Test of createMessageHash method, of class Message.
-     */
+    // Test 4: Check that a message of 250 characters
+    // is accepted.
+    @Test
+    public void testMessageLengthWithinLimit() {
+
+        String text = createText(250);
+
+        Message msg = new Message(
+                "+27821234567",
+                text
+        );
+
+        assertEquals(
+                "Message ready to send",
+                msg.sentMessage(),
+                "A 250-character message should be accepted."
+        );
+    }
+
+    // Test 5: Check that a message exceeding
+    // 250 characters is rejected.
+    @Test
+    public void testMessageLengthExceedsLimit() {
+
+        String text = createText(251);
+
+        Message msg = new Message(
+                "+27821234567",
+                text
+        );
+
+        assertEquals(
+                "Message exceeds 250 characters by 1, "
+                + "please reduce size.",
+                msg.sentMessage(),
+                "An overlong message should display an error."
+        );
+    }
+
+    // Test 6: Check that the message hash contains
+    // the first two characters of the message ID,
+    // a message number, and the first and last words.
     @Test
     public void testCreateMessageHash() {
-        System.out.println("createMessageHash");
-        Message instance = null;
-        String expResult = "";
-        String result = instance.createMessageHash();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        Message msg = new Message(
+                "+27821234567",
+                "hello world"
+        );
+
+        String printed = msg.printMessage();
+
+        String id = printed.substring(
+                "Message ID: ".length(),
+                printed.indexOf('\n')
+        );
+
+        String hash = msg.createMessageHash();
+
+        String expectedPattern =
+                java.util.regex.Pattern.quote(id.substring(0, 2))
+                + ":\\d+:HELLOWORLD";
+
+        assertTrue(
+                hash.matches(expectedPattern),
+                "Hash should contain the ID prefix, "
+                + "message number, and uppercase first "
+                + "and last words."
+        );
     }
 
-    /**
-     * Test of printMessage method, of class Message.
-     */
+    // Test 7: Check that printMessage displays
+    // all the required message details.
     @Test
     public void testPrintMessage() {
-        System.out.println("printMessage");
-        Message instance = null;
-        String expResult = "";
-        String result = instance.printMessage();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        Message msg = new Message(
+                "+27821234567",
+                "Hello there"
+        );
+
+        String result = msg.printMessage();
+
+        assertTrue(result.contains("Message ID: "));
+        assertTrue(result.contains("Message Hash: "));
+        assertTrue(result.contains("Recipient: +27821234567"));
+        assertTrue(result.contains("Message: Hello there"));
     }
 
-    /**
-     * Test of storeMessage method, of class Message.
-     */
-    @Test
-    public void testStoreMessage() {
-        System.out.println("storeMessage");
-        Message instance = null;
-        JSONObject expResult = null;
-        JSONObject result = instance.storeMessage();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    // Helper method for creating messages
+    // of a specific length.
+    private String createText(int length) {
 
-    /**
-     * Test of readMessage method, of class Message.
-     */
-    @Test
-    public void testReadMessage() {
-        System.out.println("readMessage");
-        Message.readMessage();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        char[] characters = new char[length];
+        Arrays.fill(characters, 'A');
+
+        return new String(characters);
     }
-    
 }
+

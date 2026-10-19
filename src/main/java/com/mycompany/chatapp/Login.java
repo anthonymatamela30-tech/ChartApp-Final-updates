@@ -10,9 +10,9 @@ package com.mycompany.chatapp;
  */
 public class Login {
 
-    private String username;
-    private String password;
-    private String cellPhoneNumber;
+    String username;
+    String password;
+    String cellPhoneNumber;
 
     public Login(String username, String password, String cellPhoneNumber) {
         this.username = username;
@@ -78,4 +78,3 @@ public class Login {
         }
     }
 }
-
